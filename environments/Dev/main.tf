@@ -17,12 +17,12 @@ module "pips" {
 
 }
 
-module "kv" {
-  depends_on = [module.azurerm_resource_group]
-  source     = "../../modules/azurerm_keyvault"
-  kv         = var.kv
+# module "kv" {
+#   depends_on = [module.azurerm_resource_group]
+#   source     = "../../modules/azurerm_keyvault"
+#   kv         = var.kv
 
-}
+# }
 
 module "kv_secret" {
   depends_on = [module.kv]
