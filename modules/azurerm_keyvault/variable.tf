@@ -1,4 +1,4 @@
-variable "kv" {
+variable "kv1" {
   type = map(object({
     kv_name                     = string
     location                    = string

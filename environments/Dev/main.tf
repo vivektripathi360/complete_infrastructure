@@ -1,6 +1,6 @@
 module "azurerm_resource_group" {
   source = "../../modules/resource_group"
-  rg   = var.rg
+  rg   = var.rg   
 }
 
 module "networks" {
@@ -20,7 +20,7 @@ module "pips" {
 module "kv" {
   depends_on = [module.azurerm_resource_group]
   source     = "../../modules/azurerm_keyvault"
-  kv        = var.kv
+  kv1        = var.kv
 
 }
 

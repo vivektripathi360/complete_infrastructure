@@ -1,7 +1,7 @@
 
 
 resource "azurerm_key_vault" "kv" {
-  for_each                    = var.kv
+  for_each                    = var.kv1
   name                        = each.value.kv_name
   location                    = each.value.location
   resource_group_name         = each.value.resource_group_name
