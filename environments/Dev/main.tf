@@ -1,6 +1,6 @@
 module "azurerm_resource_group" {
   source = "../../modules/resource_group"
-  rg   = var.rgs
+  rg   = var.rg
 }
 
 module "networks" {

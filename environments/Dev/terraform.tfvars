@@ -1,4 +1,4 @@
-rgs = {
+rg = {
   rg1 = {
     name       = "vk-rg1"
     location   = "eastus"
