@@ -13,7 +13,7 @@ module "networks" {
 module "pips" {
   depends_on = [module.azurerm_resource_group]
   source     = "../../modules/Public-IP"
-  pips       = var.pips
+  pip       = var.pips
 
 }
 
