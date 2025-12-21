@@ -1,0 +1,123 @@
+
+trigger:
+  branches:
+    include:
+      - main
+      - feature/*
+
+pool: Default
+
+stages:
+  - stage: Build
+    displayName: build
+    jobs:
+      - job: terraforminitvalidate
+        displayName: terraform init
+        steps:      
+        - task: TerraformInstaller@1
+          displayName: install-terraform
+          inputs:
+            terraformVersion: 'latest'
+        - task: TerraformTask@5
+          displayName: terraform-init
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/Dev'
+            backendServiceArm: 'vv-service-connection'
+            backendAzureRmOverrideSubscriptionID: 'eac08841-5119-4501-b5ac-82e7a5d29114'
+            backendAzureRmResourceGroupName: 'rg-backend'
+            backendAzureRmStorageAccountName: 'backendstgvv'
+            backendAzureRmContainerName: 'tfstates'
+            backendAzureRmKey: 'dev.terraform.tfstate'
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'validate'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/Dev'
+    
+  - stage: terraformplan
+    displayName: terraform plan
+    jobs:
+      - job: terraformplan
+        displayName: terraform plan
+        pool: Default
+        steps:
+        - task: TerraformTask@5
+          displayName: terraform-init
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/Dev'
+            backendServiceArm: 'vv-service-connection'
+            backendAzureRmOverrideSubscriptionID: 'eac08841-5119-4501-b5ac-82e7a5d29114'
+            backendAzureRmResourceGroupName: 'rg-backend'
+            backendAzureRmStorageAccountName: 'backendstgvv'
+            backendAzureRmContainerName: 'tfstates'
+            backendAzureRmKey: 'dev.terraform.tfstate'
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/Dev'
+            environmentServiceNameAzureRM: 'vv-service-connection'
+
+  - stage: codeScanning
+    displayName: Infra Code Scanning
+    jobs:
+      - job: tfsecScanningjob
+        displayName: tfsec scan tool
+        steps:
+        - task: tfsec@1
+          inputs:
+            version: 'v1.26.0'
+            dir: '(System.DefaultWorkingDirectory)/environments/Dev'
+      - job: tflint
+        displayName: tflint scan tool
+        steps:
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: 'tflint --recursive'
+            workingDirectory: '(System.DefaultWorkingDirectory)/environments/Dev'
+  
+  - stage: manualvalidation
+    displayName: approval stage
+    dependsOn: terraformplan
+    jobs:
+      - job: manualvalidation
+        displayName: manual validation
+        pool: server
+        steps:
+        - task: ManualValidation@1
+          inputs:
+            notifyUsers: 'vvdevopspro@gmail.com'
+            approvers: 'vvdevopspro@gmail.com'
+    
+  - stage: deploy
+    displayName: infra code deployment
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+    dependsOn: manualvalidation
+    jobs:
+      - job: terraformapply
+        displayName: terraform apply
+        pool: Default
+        steps:
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/Dev'
+            backendServiceArm: 'vv-service-connection'
+            backendAzureRmResourceGroupName: 'rg-backend'
+            backendAzureRmStorageAccountName: 'backendstgvv'
+            backendAzureRmContainerName: 'tfstates'
+            backendAzureRmKey: 'dev.terraform.tfstate'
+
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'apply'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/Dev'
+            commandOptions: '--auto approve'
+            environmentServiceNameAzureRM: 'vv-service-connection'
