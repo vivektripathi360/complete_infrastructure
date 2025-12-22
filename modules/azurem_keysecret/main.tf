@@ -1,4 +1,4 @@
-resource "azurerm_key_vault_secret" "kv_secret" {
+resource "azurerm_key_vault_secret" "kv_secret1" {
   for_each     = var.kv_secret
   name         = each.value.kv_secret_name
   value        = each.value.secret_value

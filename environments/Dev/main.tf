@@ -13,7 +13,7 @@ module "networks" {
 module "pips" {
   depends_on = [module.azurerm_resource_group]
   source     = "../../modules/Public-IP"
-  pip       = var.pips
+  pips       = var.pips
 
 }
 
@@ -23,6 +23,7 @@ module "kv" {
   kv1        = var.kv
 
 }
+
 
 module "kv_secret" {
   depends_on = [module.kv]

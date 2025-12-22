@@ -11,14 +11,11 @@ variable "vms" {
       public_ip_address_id          = optional(string)
     }))
 
-    vm_name                         = string
-    # resource_group_name             = string
-    # location                        = string
+    vm_name                         = strin
     size                            = string
     admin_username                  = string
     admin_password                  = string
-    # disable_password_authentication = optional(bool)
-    # network_interface_ids           = list(string)
+    
     admin_ssh_key = optional(object({
       username   = string
       public_key = string

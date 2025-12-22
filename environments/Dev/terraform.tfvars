@@ -1,8 +1,8 @@
 rg = {
   rg1 = {
-    name       = "vk-rg1"
-    location   = "eastus"
-    managed_by = "community"
+    name       = "mt-rg"
+    location   = "centralindia"
+    managed_by = "devopsinsiders"
     tags = {
       dev         = "vivek"
       environment = "Dev"
@@ -12,18 +12,18 @@ rg = {
 
 networks = {
   "vnet1" = {
-    vnet_name               = "vk-vnet1"
-    location            = "eastus"
-    resource_group_name = "vk-rg1"
+    vnet_name           = "vk_vnet"
+    location            = "centralindia"
+    resource_group_name = "mt-rg"
     address_space       = ["10.0.0.0/16"]
     subnet = [
       {
-        subnet_name      = "font-subnet"
+        subnet_name      = "frontend-subnet"
         address_prefixes = ["10.0.1.0/24"]
       }
       ,
       {
-        subnet_name      = "back-subnet"
+        subnet_name      = "backend-subnet"
         address_prefixes = ["10.0.2.0/24"]
       }
     ]
@@ -34,9 +34,9 @@ networks = {
 pips = {
 
   pip1 = {
-    pip_name            = "font-pip1"
-    resource_group_name = "vk-rg1"
-    location            = "eastus"
+    pip_name            = "frontend-pip"
+    resource_group_name = "mt-rg"
+    location            = "centralindia"
     allocation_method   = "Static"
     tags = {
       environment = "dev"
@@ -45,9 +45,9 @@ pips = {
   }
 
   pip2 = {
-    pip_name            = "back-pip"
-    resource_group_name = "vk-rg1"
-    location            = "eastus"
+    pip_name            = "backend-pip"
+    resource_group_name = "mt-rg"
+    location            = "centralindia"
     allocation_method   = "Static"
     tags = {
       environment = "dev"
@@ -58,62 +58,62 @@ pips = {
 
 kv = {
   kv = {
-    kv_name             = "vk-vault"
-    location            = "eastus"
-    resource_group_name = "vk-rg1"
+    kv_name             = "vk-vault1"
+    location            = "centralindia"
+    resource_group_name = "mt-rg"
     sku_name            = "standard"
   }
 }
 
 kv_secret = {
   secret1 = {
-    kv_secret_name = "font-username"
-    secret_value = "vk-admin1"
-    kv_name = "vk-vault"
-   resource_group_name = "vk-rg1"
+    kv_secret_name      = "frontend-username1"
+    secret_value        = "devopsadmin1"
+    kv_name             = "vk-vault1"
+    resource_group_name = "mt-rg"
   }
   secret2 = {
-   kv_secret_name = "back-username"
-   secret_value = "vk-admin2"
-   kv_name = "vk-vault"
-   resource_group_name = "vk-rg1"
+    kv_secret_name      = "backend-username1"
+    secret_value        = "devopsadmin2"
+    kv_name             = "vk-vault1"
+    resource_group_name = "mt-rg"
   }
   secret3 = {
-   kv_secret_name = "font-password"
-   secret_value = "admin@1234567"
-   kv_name = "vk-vault"
-   resource_group_name = "vk-rg1"
+    kv_secret_name      = "frontend-password1"
+    secret_value        = "admin@12345"
+    kv_name             = "vk-vault1"
+    resource_group_name = "mt-rg"
   }
-secret4 = {
-   kv_secret_name = "back-password"
-   secret_value = "admin@1234567"
-   kv_name = "vk-vault"
-   resource_group_name = "vk-rg1"
+  secret4 = {
+    kv_secret_name      = "backend-password3"
+    secret_value        = "admin@12345"
+    kv_name             = "vk-vault1"
+    resource_group_name = "mt-rg"
   }
 }
 vms = {
-  vm5 = {
+  vm1 = {
 
-    nic_name = "nic-font"
+    nic_name = "nic-front"
     ip_configuration = [
       { ip_name                       = "internal"
         private_ip_address_allocation = "Dynamic"
       }
     ]
-    subnet_name                   = "font-subnet"
-    vnet_name                     = "vk-vnet1"
-    kv_name                       = "vk-vault"
-    username                      = "font-username"
-    password                      = "font-password"
-    pip_name                      = "font-pip1"
-    nic_name                      = "nic-font"
-    location                      = "eastus"
-    resource_group_name           = "vk-rg1"
-    admin_username                  = "vk-admin"
-    admin_password                  = "admin@1234567"
-    ip_name                       = "font-ip"
+    subnet_name                   = "frontend-subnet"
+    vnet_name                     = "vk_vnet"
+    kv_name                       = "vk-vault1"
+    username                      = "frontend-username"
+    password                      = "frontend-password"
+    pip_name                      = "frontend-pip"
+    nic_name                      = "nic-frontend"
+    location                      = "centralindia"
+    resource_group_name           = "mt-rg"
+    admin_username                = "devopsadmin"
+    admin_password                = "admin@12345"
+    ip_name                       = "frontend-ip"
     private_ip_address_allocation = "Dynamic"
-    vm_name                       = "font-vm"
+    vm_name                       = "front-vm"
     size                          = "Standard_D2s_v3"
     os_disk = [
       {
@@ -121,37 +121,37 @@ vms = {
         storage_account_type = "Standard_LRS"
       }
     ]
-    
+
     source_image_reference = [{
       publisher = "Canonical"
-      offer     = "0001-com-ubuntu-server-"
+      offer     = "0001-com-ubuntu-server-jammy"
       sku       = "22_04-lts"
       version   = "latest"
     }]
   }
 
-  vm6 = {
+  vm2 = {
 
-    nic_name = "vk-nic"
+    nic_name = "nic-back"
     ip_configuration = [
-      { ip_name                          = "internal"
+      { ip_name                       = "internal"
         private_ip_address_allocation = "Dynamic"
       }
     ]
-    subnet_name                   = "back-subnet"
-    vnet_name                     = "vk-vnet1"
-    kv_name                       = "vk-vault"
-    username                      = "back-username"
-    password                      = "back-password"
-    pip_name                      = "back-pip"
-    nic_name                      = "vk-nic"
-    location                      = "eastus"
-    resource_group_name           = "vk-rg1"
-    ip_name                       = "back-ip"
+    subnet_name                   = "backend-subnet"
+    vnet_name                     = "vk_vnet"
+    kv_name                       = "vk-vault1"
+    username                      = "backend-username"
+    password                      = "backend-password"
+    pip_name                      = "backend-pip"
+    nic_name                      = "nic-backend"
+    location                      = "centralindia"
+    resource_group_name           = "mt-rg"
+    ip_name                       = "backend-ip"
     private_ip_address_allocation = "Dynamic"
     vm_name                       = "back-vm"
-    admin_username                  = "vk-admin"
-    admin_password                  = "admin@1234567"
+    admin_username                = "devopsadmin"
+    admin_password                = "admin@12345"
     size                          = "Standard_D2s_v3"
     os_disk = [
       {
@@ -161,7 +161,7 @@ vms = {
     ]
     source_image_reference = [{
       publisher = "Canonical"
-      offer     = "0001-com-ubuntu-server-"
+      offer     = "0001-com-ubuntu-server-jammy"
       sku       = "22_04-lts"
       version   = "latest"
     }]

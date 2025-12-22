@@ -4,7 +4,6 @@ variable "kv1" {
     location                    = string
     resource_group_name         = string
     enabled_for_disk_encryption = optional(bool)
-    # tenant_id                   = string
     soft_delete_retention_days  = optional(number)
     purge_protection_enabled    = optional(bool)
     sku_name                    = string

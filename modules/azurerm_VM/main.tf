@@ -1,4 +1,4 @@
-resource "azurerm_network_interface" "vv-nic" {
+resource "azurerm_network_interface" "mt-nic" {
 
   for_each            = var.vms
   name                = each.value.nic_name
@@ -20,7 +20,7 @@ resource "azurerm_network_interface" "vv-nic" {
 
 }
 
-resource "azurerm_linux_virtual_machine" "vv-vm" {
+resource "azurerm_linux_virtual_machine" "vk-vm" {
     for_each                        = var.vms
   name                            = each.value.vm_name
   resource_group_name             = each.value.resource_group_name
@@ -29,7 +29,7 @@ resource "azurerm_linux_virtual_machine" "vv-vm" {
   admin_username                  = data.azurerm_key_vault_secret.username[each.key].value
   admin_password                  = data.azurerm_key_vault_secret.password[each.key].value
   disable_password_authentication = false
-  network_interface_ids           = [azurerm_network_interface.vv-nic[each.key].id, ]
+  network_interface_ids           = [azurerm_network_interface.mt-nic[each.key].id, ]
 
   dynamic "admin_ssh_key" {
 

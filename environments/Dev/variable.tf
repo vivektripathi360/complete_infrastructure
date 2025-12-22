@@ -60,8 +60,6 @@ variable "vms" {
     }))
 
     vm_name = string
-    # resource_group_name             = string
-    # location                        = string
     size                            = string
     admin_username                  = string
     admin_password                  = string
@@ -110,7 +108,6 @@ variable "kv" {
     location                    = string
     resource_group_name         = string
     enabled_for_disk_encryption = optional(bool)
-    # tenant_id                   = string
     soft_delete_retention_days  = optional(number)
     purge_protection_enabled    = optional(bool)
     sku_name                    = string
@@ -128,7 +125,6 @@ variable "kv_secret" {
   type = map(object({
     kv_secret_name = string
     secret_value = string
-    # key_vault_id   = string
     kv_name        = string
     resource_group_name = string
   }))
