@@ -24,12 +24,12 @@ stages:
             provider: 'azurerm'
             command: 'init'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/Dev'
-            backendServiceArm: 'vv-service-connection'
-            backendAzureRmOverrideSubscriptionID: 'eac08841-5119-4501-b5ac-82e7a5d29114'
-            backendAzureRmResourceGroupName: 'rg-backend'
-            backendAzureRmStorageAccountName: 'backendstgvv'
-            backendAzureRmContainerName: 'tfstates'
-            backendAzureRmKey: 'dev.terraform.tfstate'
+            backendServiceArm: 'mt-service-connection'
+            backendAzureRmOverrideSubscriptionID: '2fe6adb6-b639-4804-8d25-87b437c9cbe6'
+            backendAzureRmResourceGroupName: 'mt-rg'
+            backendAzureRmStorageAccountName: 'mt-stg'
+            backendAzureRmContainerName: 'mt-states'
+            backendAzureRmKey: 'mt.terraform.tfstate'
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
@@ -49,18 +49,18 @@ stages:
             provider: 'azurerm'
             command: 'init'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/Dev'
-            backendServiceArm: 'vv-service-connection'
-            backendAzureRmOverrideSubscriptionID: 'eac08841-5119-4501-b5ac-82e7a5d29114'
-            backendAzureRmResourceGroupName: 'rg-backend'
-            backendAzureRmStorageAccountName: 'backendstgvv'
-            backendAzureRmContainerName: 'tfstates'
-            backendAzureRmKey: 'dev.terraform.tfstate'
+            backendServiceArm: 'mt-service-connection'
+            backendAzureRmOverrideSubscriptionID: '2fe6adb6-b639-4804-8d25-87b437c9cbe6'
+            backendAzureRmResourceGroupName: 'mt-rg'
+            backendAzureRmStorageAccountName: 'mt-stg'
+            backendAzureRmContainerName: 'mt-states'
+            backendAzureRmKey: 'mt.terraform.tfstate'
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
             command: 'plan'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/Dev'
-            environmentServiceNameAzureRM: 'vv-service-connection'
+            environmentServiceNameAzureRM: 'mt-service-connection'
 
   - stage: codeScanning
     displayName: Infra Code Scanning
@@ -91,8 +91,8 @@ stages:
         steps:
         - task: ManualValidation@1
           inputs:
-            notifyUsers: 'vvdevopspro@gmail.com'
-            approvers: 'vvdevopspro@gmail.com'
+            notifyUsers: 'vivektripathi8662@gmail.com'
+            approvers: 'vivektripathi8662@gmail.com' 
     
   - stage: deploy
     displayName: infra code deployment
@@ -108,11 +108,11 @@ stages:
             provider: 'azurerm'
             command: 'init'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/Dev'
-            backendServiceArm: 'vv-service-connection'
-            backendAzureRmResourceGroupName: 'rg-backend'
-            backendAzureRmStorageAccountName: 'backendstgvv'
-            backendAzureRmContainerName: 'tfstates'
-            backendAzureRmKey: 'dev.terraform.tfstate'
+            backendServiceArm: 'mt-service-connection'
+            backendAzureRmResourceGroupName: 'mt-rg'
+            backendAzureRmStorageAccountName: 'mt-stg'
+            backendAzureRmContainerName: 'mt-states'
+            backendAzureRmKey: 'mt.terraform.tfstate'
 
         - task: TerraformTask@5
           inputs:
@@ -120,4 +120,4 @@ stages:
             command: 'apply'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/Dev'
             commandOptions: '--auto approve'
-            environmentServiceNameAzureRM: 'vv-service-connection'
+            environmentServiceNameAzureRM: 'mt-service-connection'
